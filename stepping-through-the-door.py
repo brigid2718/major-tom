@@ -64,8 +64,8 @@ class Sensor:
         self.is_triggered = False
 
     def check_input(self):
-        sensor_reading = randint(1,255)
-        if sensor_reading > 240:
+        sensor_reading = randint(1,8001)
+        if sensor_reading > 8000:
             print sensor_reading
             self.trigger()
         else:
@@ -90,9 +90,16 @@ class GroundControl:
         self.mission_q = "/mission_settings"
 
     def light_permission(self):
-        if requests.get(self.url+self.uid+self.state_q).json()["state_settings"]["lights_on"]:
+        if self.query_state_settings():
             return True
         else:
+            return False
+
+    def query_state_settings(self):
+        try:
+            r = requests.get(self.url+self.uid+self.state_q).json()["state_settings"]["lights_on"]
+            return r
+        except:
             return False
 
 ground_control = GroundControl("826dev")
