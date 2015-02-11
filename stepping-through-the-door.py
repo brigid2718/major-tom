@@ -6,8 +6,10 @@ import time
 
 import sys
 sys.path.append('/home/pi/rpi_ws281x/python')
+sys.path.append('/home/pi/adxl345-python')
 
 from neopixel import *
+from adxl345 import ADXL345
 from random import randint
 
 # initiate light strip and load light strip functions
@@ -56,6 +58,7 @@ def teleport(strip):
 class Sensor:
     def __init__(self):
         self.is_triggered = False
+        self.device = ADXL345()
 
     def trigger(self):
         self.is_triggered = True
@@ -64,9 +67,13 @@ class Sensor:
         self.is_triggered = False
 
     def check_input(self):
-        sensor_reading = randint(1,8001)
-        if sensor_reading > 8000:
-            print sensor_reading
+        prev_reading = self.device.getAxes(False)
+        print prev_reading
+        time.sleep(0.1)
+        current_reading = self.device.getAxes(False)
+        print current_reading
+        if abs(current_reading['x'] - prev_reading['x']) > 2:
+            print abs(current_reading['x'] - prev_reading['x'])
             self.trigger()
         else:
             self.untrigger()
