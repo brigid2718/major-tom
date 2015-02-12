@@ -31,6 +31,20 @@ def colorWipe(strip, color, wait_ms=50):
         strip.show()
         time.sleep(wait_ms/1000.0)
 
+def wheel(pos):
+    """Generate rainbow colors across 0-255 positions."""
+    if pos < 85:
+        return Color(pos * 3, 255 - pos * 3, 0)
+    elif pos < 170:
+        pos -= 85
+        return Color(255 - pos * 3, 0, pos * 3)
+    else:
+        pos -= 170
+        return Color(0, pos * 3, 255 - pos * 3)
+
+def turnOff(strip):
+    colorWipe(strip, Color(0,0,0))
+
 # set up comminications with ground control
 
 ground_control = groundcontrol.GroundControl("826dev")
@@ -55,8 +69,9 @@ while True:
     if sensor.is_triggered:
         print "in triggered block"
         if ground_control.light_permission():
-            light_pattern = "mars" # ground_control.light_pattern_str
+            light_pattern = "oz" # ground_control.light_pattern_str
             execfile("pattern-lib/"+light_pattern+".py")
             display_pattern(light_strip)
         sensor.untrigger()
+        turnOff(light_strip)
     previous_sensor_state = current_sensor_state
