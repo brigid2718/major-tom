@@ -9,7 +9,7 @@ class Sensor:
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    def pir_setpu(self):
+    def pir_setup(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin, GPIO.IN)
 
