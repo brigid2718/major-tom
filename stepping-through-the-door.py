@@ -56,8 +56,8 @@ light_strip.begin()
 
 # set up the button sensor
 
-sensor = sensorcontrol.Sensor()
-sensor.button_setup()
+sensor = sensorcontrol.Sensor(16)
+sensor.pir_setup()
 
 # start the loop
 
@@ -65,7 +65,7 @@ previous_sensor_state = GPIO.input(sensor.pin)
 
 while True:
     current_sensor_state = GPIO.input(sensor.pin)
-    sensor.check_for_trigger(previous_sensor_state, current_sensor_state)
+    sensor.check_for_motion(previous_sensor_state, current_sensor_state)
     if sensor.is_triggered:
         print "in triggered block"
         if ground_control.light_permission():
