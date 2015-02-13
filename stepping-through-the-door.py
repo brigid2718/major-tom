@@ -65,6 +65,7 @@ previous_sensor_state = GPIO.input(sensor.pin)
 
 while True:
     current_sensor_state = GPIO.input(sensor.pin)
+    print current_sensor_state
     sensor.check_for_motion(previous_sensor_state, current_sensor_state)
     if sensor.is_triggered:
         print "in triggered block"
