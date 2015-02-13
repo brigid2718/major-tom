@@ -19,9 +19,23 @@ class GroundControl:
         else:
             return False
 
+    def light_directive(self):
+        directive = self.query_mission_settings("light_directive")
+        if directive == False:
+            return "oz" # default is the rainbow
+        else:
+            return directive
+
     def query_state_settings(self, str):
         try:
             r = requests.get(self.url+self.uid+self.state_q).json()["state_settings"][str]
+            return r
+        except:
+            return False
+
+    def query_mission_settings(self, str):
+        try:
+            r = requests.get(self.url+self.uid+self.mission_q).json()["mission_settings"][str]
             return r
         except:
             return False

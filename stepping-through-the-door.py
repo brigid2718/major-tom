@@ -69,9 +69,13 @@ while True:
     if sensor.is_triggered:
         print "in triggered block"
         if ground_control.light_permission():
-            light_pattern = "oz" # ground_control.light_pattern_str
+            light_pattern = ground_control.light_directive()
             execfile("pattern-lib/"+light_pattern+".py")
-            display_pattern(light_strip)
+            start_time = time.time()
+            time_elapsed = 0
+            while time_elapsed < 20:
+                display_pattern(light_strip)
+                time_elapsed = time.time() - start_time
         sensor.untrigger()
         turnOff(light_strip)
     previous_sensor_state = current_sensor_state
