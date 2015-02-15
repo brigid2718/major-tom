@@ -3,7 +3,7 @@
 # modules to import
 import requests
 import RPi.GPIO as GPIO
-
+import pygame
 import time
 import sys
 import pygame
@@ -57,26 +57,31 @@ light_strip.begin()
 # set up the button sensor
 
 sensor = sensorcontrol.Sensor(16)
-sensor.pir_setup()
+
+# set up the sound file
+
+pygame.mixer.init()
+pygame.mixer.music.load("sound-lib/teleport.wav")
 
 # start the loop
 
-previous_sensor_state = GPIO.input(sensor.pin)
-
 while True:
-    current_sensor_state = GPIO.input(sensor.pin)
-    print current_sensor_state
-    sensor.check_for_motion(previous_sensor_state, current_sensor_state)
-    if sensor.is_triggered:
-        print "in triggered block"
+    # if sensor trigger for given amount of time do:
+        # play lights if allowed
+        # play music if allowed
+    print sensor.value # debugging
+    if sensor.is_triggered():
+        print "in triggered block" # debugging
+        if ground_control.sound_permission():
+            pygame.mixer.music.play(-1)
         if ground_control.light_permission():
             light_pattern = ground_control.light_directive()
-            execfile("pattern-lib/"+light_pattern+".py")
+            #patternlib = os.listdir(patternlibdir)
+            execfile("pattern-lib/"+light_pattern+".py") # if light_pattern.py in patternlib
             start_time = time.time()
             time_elapsed = 0
             while time_elapsed < 20:
                 display_pattern(light_strip)
                 time_elapsed = time.time() - start_time
-        sensor.untrigger()
         turnOff(light_strip)
-    previous_sensor_state = current_sensor_state
+        pygame.mixer.music.stop()
