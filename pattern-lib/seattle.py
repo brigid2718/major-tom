@@ -14,12 +14,12 @@ def initpattern(strip, numsteps):
     """ Return a blank pattern of numsteps steps.
 
     """
-    
+
     pattern = [ [ Pixel(Color(0,0,0)) for pixel in range(strip.numPixels()) ] for step in range(numsteps) ]
     return pattern
 
 def pulsepixel(pattern, beginstep, position, color):
-    pulse_duration = 10
+    pulse_duration = 30
 
     # We need to unpack the color into RGB
     blue = color & 255
@@ -37,13 +37,15 @@ def pulsepixel(pattern, beginstep, position, color):
 
 def display_pattern(strip):
     print "STARTING PATTERN (stepping through the door loops for 20 seconds)"
-    timestep_ms =  500
+    timestep_ms =  50
 
     pattern = initpattern(strip, 50)
 
     # At timestep 2, set pixel at position 5 to white
-    pattern[2][5].color=Color(255,255,255)
-    pulsepixel(pattern, 1, 6, Color(0,255,0))
+    # pattern[2][5].color=Color(255,255,255)
+    pulsepixel(pattern, 1, 6, Color(0,0,255))
+    pulsepixel(pattern, 5, 5, Color(0,0,255))
+    pulsepixel(pattern, 5, 7, Color(0,0,255))
     #import IPython; IPython.embed()
     for step in pattern:
         print "STEP"
