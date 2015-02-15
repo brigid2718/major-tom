@@ -1,14 +1,33 @@
-def display_pattern(strip, wait_ms=20, color=Color(30,30,255)):
-    for i in range(strip.numPixels()):
-        strip.setPixelColor(i, color)
+""" Rain pattern for major-tom
+
+"""
+
+class Pixel():
+    def __init__(self,  color=Color(0,0,0), brightness=1):
+        self.color = color
+        self.brightness = brightness
+
+
+def initpattern(strip, numsteps):
+    """ Return a blank pattern of numsteps steps.
+
+    """
+
+    pattern = [ [ Pixel(Color(0,0,0)) * strip.numPixels() ]  * numsteps ]
+    return pattern
+          
+
+def display_pattern(strip):
+    timestep_ms =  500
+    
+    pattern = initpattern(strip, 3)
+
+    # At timestep 2, set pixel at position 5 to white
+    pattern[2][5].color=Color(255,255,255)
+    for step in pattern:
+        for position, pixel in enumerate(step):
+            strip.setPixelColor(position, pixel.color)
         strip.show()
-        time.sleep(wait_ms/1000.0)
-        strip.setPixelColor(i, Color(0,0,0))
-        strip.show()
-        time.sleep(wait_ms/1000.0)
-        strip.setPixelColor(strip.numPixels()-i, color)
-        strip.show()
-        time.sleep(wait_ms/1000.0)
-        strip.setPixelColor(strip.numPixels()-i, Color(0,0,0))
-        strip.show()
-        time.sleep(wait_ms/1000.0)
+        time.sleep(timestep_ms/1000)
+    
+
