@@ -13,7 +13,7 @@ def initpattern(strip, numsteps):
 
     """
 
-    pattern_step = [ Pixel(Color(0,0,0)) ] * strip.numPixels() ]
+    pattern_step = [ [ Pixel(Color(0,0,0)) ] * strip.numPixels() ]
     pattern = [ pattern_step for step in range(numsteps) ]
     return pattern
 
