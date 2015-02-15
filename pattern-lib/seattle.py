@@ -13,13 +13,14 @@ def initpattern(strip, numsteps):
 
     """
 
-    pattern = [ [ Pixel(Color(0,0,0)) * strip.numPixels() ]  * numsteps ]
+    pattern_step = [ Pixel(Color(0,0,0)) ] * strip.numPixels() ]
+    pattern = [ pattern_step for step in range(numsteps) ]
     return pattern
-          
+
 
 def display_pattern(strip):
     timestep_ms =  500
-    
+
     pattern = initpattern(strip, 3)
 
     # At timestep 2, set pixel at position 5 to white
@@ -29,5 +30,3 @@ def display_pattern(strip):
             strip.setPixelColor(position, pixel.color)
         strip.show()
         time.sleep(timestep_ms/1000)
-    
-
