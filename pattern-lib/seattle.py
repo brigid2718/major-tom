@@ -21,11 +21,18 @@ def initpattern(strip, numsteps):
 def pulsepixel(pattern, beginstep, position, color):
     pulse_duration = 10
 
+    # We need to unpack the color into RGB
+    blue = color & 255
+    green = (color >> 8) & 255
+    red = (color >> 16) & 255
+
     #TODO: Fix this gross type mess. Ew.
     for i, step in enumerate(pattern[beginstep : beginstep+pulse_duration]):
-        step[position].color.red = int(color.red * ((i+1)/float(pulse_duration)))
-        step[position].color.green = int(color.green * ((i+1)/float(pulse_duration)))
-        step[position].color.blue = int(color.blue * ((i+1)/float(pulse_duration)))
+        newred = int(red * ((i+1)/float(pulse_duration)))
+        newgreen = int(green * ((i+1)/float(pulse_duration)))
+        newblue = int(blue * ((i+1)/float(pulse_duration)))
+
+        step[position].color = Color(newred, newgreen, newblue)
 
 
 def display_pattern(strip):
