@@ -80,7 +80,7 @@ while True:
             execfile("pattern-lib/"+light_pattern+".py") # if light_pattern.py in patternlib
             start_time = time.time()
             time_elapsed = 0
-            while time_elapsed < 20:
+            while time_elapsed < 5:
                 display_pattern(light_strip)
                 time_elapsed = time.time() - start_time
         turnOff(light_strip)
