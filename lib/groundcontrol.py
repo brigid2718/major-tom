@@ -26,6 +26,13 @@ class GroundControl:
         else:
             return directive
 
+    def sound_directive(self):
+        directive = self.query_mission_settings("sound_directive")
+        if directive == False:
+            return ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"] # default is greenwoodave
+        else:
+            return directive
+
     def query_state_settings(self, str):
         try:
             r = requests.get(self.url+self.uid+self.state_q).json()["state_settings"][str]
