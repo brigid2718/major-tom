@@ -61,11 +61,12 @@ def turnOff(strip):
 def music_thread(sounds, stop_event):
     pygame.mixer.music.load("/home/pi/major-tom/sound-lib/"+sounds[0]+".wav")
     sounds.append(sounds.pop(0)) # move to the end of the list
+    pygame.mixer.music.set_endevent(1)
     pygame.mixer.music.play()
     # queue second song
     pygame.mixer.music.queue("/home/pi/major-tom/sound-lib/"+sounds[0]+".wav")
     sounds.append(sounds.pop(0)) # move to the end of the list
-    pygame.mixer.music.set_endevent(1)
+
 
     while(not stop_event.is_set()):
         if len(pygame.event.get()) > 0:
@@ -111,6 +112,7 @@ while True:
             sound_pattern = ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"]
             music_stop= threading.Event()
             play_music = threading.Thread(target=music_thread, args=(sound_pattern, music_stop))
+            play_music.start()
         if ground_control.light_permission():
             light_pattern = ground_control.light_directive()
             #patternlib = os.listdir(patternlibdir)
