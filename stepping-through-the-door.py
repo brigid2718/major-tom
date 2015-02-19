@@ -110,7 +110,7 @@ while True:
             # sound_pattern = ground_control.sound_directive()
             sound_pattern = ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"]
             music_stop= threading.Event()
-            play_music = threading.Thread(target=music_thread, args=(sounds, music_stop))
+            play_music = threading.Thread(target=music_thread, args=(sound_pattern, music_stop))
         if ground_control.light_permission():
             light_pattern = ground_control.light_directive()
             #patternlib = os.listdir(patternlibdir)
