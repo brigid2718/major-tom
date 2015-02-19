@@ -8,9 +8,11 @@ import pygame
 import time
 import sys
 import pygame
+
+from signal import alarm, signal, SIGALRM, SIGKILL
+
 sys.path.append('/home/pi/rpi_ws281x/python')
 sys.path.append('/home/pi/ground-control/lib')
-
 from lib import groundcontrol
 from lib import sensorcontrol
 from neopixel import *
@@ -89,9 +91,22 @@ light_strip.begin()
 sensor = sensorcontrol.Sensor(16)
 
 # set up the sound file
-pygame.init()
-# has to have a display set for event handling
-pygame.display.set_mode((0, 0))
+# this section is an unbelievable nasty hack - for some reason Pygame
+# needs a keyboardinterrupt to initialise in some limited circs (second time running)
+class Alarm(Exception):
+    pass
+def alarm_handler(signum, frame):
+    raise Alarm
+signal(SIGALRM, alarm_handler)
+alarm(3)
+try:
+    pygame.init()
+    # has to have a display set for event handling
+    pygame.display.set_mode((0, 0))
+    alarm(0)
+except Alarm:
+    raise KeyboardInterrupt
+
 pygame.mixer.init()
 
 # start the loop
