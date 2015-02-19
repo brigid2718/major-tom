@@ -75,7 +75,8 @@ while True:
         start_time = time.time()
         time_elapsed = 0
         if ground_control.sound_permission():
-            sound_pattern = ground_control.sound_directive()
+            # sound_pattern = ground_control.sound_directive()
+            sound_pattern = ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"]
             [pygame.mixer.music.load("/home/pi/major-tom/sound-lib/"+soundfile+".wav") for soundfile in sound_pattern]
             pygame.mixer.music.play(-1)
         if ground_control.light_permission():
