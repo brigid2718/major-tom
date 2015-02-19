@@ -63,15 +63,13 @@ def music_thread(sounds, stop_event):
     sounds.append(sounds.pop(0)) # move to the end of the list
     pygame.mixer.music.set_endevent(1)
     pygame.mixer.music.play()
-    # queue second song
-    pygame.mixer.music.queue("/home/pi/major-tom/sound-lib/"+sounds[0]+".wav")
-    sounds.append(sounds.pop(0)) # move to the end of the list
-
 
     while(not stop_event.is_set()):
         if len(pygame.event.get()) > 0:
             pygame.mixer.music.load("/home/pi/major-tom/sound-lib/"+sounds[0]+".wav")
             sounds.append(sounds.pop(0)) # move to the end of the list
+            pygame.mixer.music.set_endevent(1)
+            pygame.mixer.music.play()
 
     pygame.mixer.music.stop()
 
