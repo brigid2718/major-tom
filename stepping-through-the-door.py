@@ -2,6 +2,7 @@
 
 # modules to import
 import requests
+import threading
 import RPi.GPIO as GPIO
 import pygame
 import time
@@ -45,6 +46,36 @@ def wheel(pos):
 def turnOff(strip):
     colorWipe(strip, Color(0,0,0))
 
+# pygame sound thread
+
+# def music_thread(arg1, stop_event):
+#     load first song and move it to the end of the list
+#     play music
+#     queue second song
+#
+#     while not stop event is set:
+#         if music end event exists:
+#             load and play next song
+#     stop music
+
+def music_thread(sounds, stop_event):
+    pygame.mixer.music.load("/home/pi/major-tom/sound-lib/"+sounds[0]+".wav")
+    sounds.append(sounds.pop(0)) # move to the end of the list
+    pygame.mixer.music.play()
+    # queue second song
+    pygame.mixer.music.queue("/home/pi/major-tom/sound-lib/"+sounds[0]+".wav")
+    sounds.append(sounds.pop(0)) # move to the end of the list
+    pygame.mixer.music.set_endevent(1)
+
+    while(not stop_event.is_set()):
+        if len(pygame.event.get()) > 0:
+            pygame.mixer.music.load("/home/pi/major-tom/sound-lib/"+sounds[0]+".wav")
+            sounds.append(sounds.pop(0)) # move to the end of the list
+
+    pygame.mixer.music.stop()
+
+
+
 # set up comminications with ground control
 
 ground_control = groundcontrol.GroundControl("826dev")
@@ -59,9 +90,10 @@ light_strip.begin()
 sensor = sensorcontrol.Sensor(16)
 
 # set up the sound file
-
+pygame.init()
+# has to have a display set for event handling
+pygame.display.set_mode((0, 0))
 pygame.mixer.init()
-# pygame.mixer.music.load("/home/pi/major-tom/sound-lib/teleport.wav")
 
 # start the loop
 
@@ -77,9 +109,8 @@ while True:
         if ground_control.sound_permission():
             # sound_pattern = ground_control.sound_directive()
             sound_pattern = ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"]
-            pygame.mixer.music.load("/home/pi/major-tom/sound-lib/"+sound_pattern.pop(0)+".wav")
-            [pygame.mixer.music.queue("/home/pi/major-tom/sound-lib/"+soundfile+".wav") for soundfile in sound_pattern]
-            pygame.mixer.music.play(-1)
+            music_stop= threading.Event()
+            play_music = threading.Thread(target=music_thread, args=(sounds, music_stop))
         if ground_control.light_permission():
             light_pattern = ground_control.light_directive()
             #patternlib = os.listdir(patternlibdir)
@@ -90,4 +121,5 @@ while True:
             turnOff(light_strip)
         while time_elapsed < 15:
             time_elapsed = time.time() - start_time
-        pygame.mixer.music.stop()
+        # turn off the music thread by sending the stop event
+        music_stop.set()
