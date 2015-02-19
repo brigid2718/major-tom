@@ -61,7 +61,7 @@ sensor = sensorcontrol.Sensor(16)
 # set up the sound file
 
 pygame.mixer.init()
-pygame.mixer.music.load("sound-lib/teleport.wav")
+# pygame.mixer.music.load("/home/pi/major-tom/sound-lib/teleport.wav")
 
 # start the loop
 
@@ -72,16 +72,20 @@ while True:
     print sensor.value # debugging
     if sensor.is_triggered():
         print "in triggered block" # debugging
+        start_time = time.time()
+        time_elapsed = 0
         if ground_control.sound_permission():
+            sound_pattern = ground_control.sound_directive()
+            [pygame.mixer.music.load("/home/pi/major-tom/sound-lib/"+soundfile+".wav") for soundfile in sound_pattern]
             pygame.mixer.music.play(-1)
         if ground_control.light_permission():
             light_pattern = ground_control.light_directive()
             #patternlib = os.listdir(patternlibdir)
-            execfile("pattern-lib/"+light_pattern+".py") # if light_pattern.py in patternlib
-            start_time = time.time()
-            time_elapsed = 0
-            while time_elapsed < 20:
+            execfile("/home/pi/major-tom/pattern-lib/"+light_pattern+".py") # if light_pattern.py in patternlib
+            while time_elapsed < 15:
                 display_pattern(light_strip)
                 time_elapsed = time.time() - start_time
-        turnOff(light_strip)
+            turnOff(light_strip)
+        while time_elapsed < 15:
+            time_elapsed = time.time() - start_time
         pygame.mixer.music.stop()
