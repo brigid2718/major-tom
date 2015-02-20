@@ -34,6 +34,17 @@ def colorWipe(strip, color, wait_ms=50):
         strip.show()
         time.sleep(wait_ms/1000.0)
 
+def theaterChase(strip, color, wait_ms=50, iterations=10):
+    """Movie theater light style chaser animation."""
+    for j in range(iterations):
+        for q in range(3):
+            for i in range(0, strip.numPixels(), 3):
+                strip.setPixelColor(i+q, color)
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+            for i in range(0, strip.numPixels(), 3):
+                strip.setPixelColor(i+q, 0)
+
 def wheel(pos):
     """Generate rainbow colors across 0-255 positions."""
     if pos < 85:
@@ -44,6 +55,17 @@ def wheel(pos):
     else:
         pos -= 170
         return Color(0, pos * 3, 255 - pos * 3)
+
+def theaterChaseRainbow(strip, wait_ms=50):
+    """Rainbow movie theater light style chaser animation."""
+    for j in range(256):
+        for q in range(3):
+            for i in range(0, strip.numPixels(), 3):
+                strip.setPixelColor(i+q, wheel((i+j) % 255))
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+            for i in range(0, strip.numPixels(), 3):
+                strip.setPixelColor(i+q, 0)
 
 def turnOff(strip):
     colorWipe(strip, Color(0,0,0))
@@ -123,19 +145,19 @@ while True:
         time_elapsed = 0
         if ground_control.sound_permission():
             # sound_pattern = ground_control.sound_directive()
-            # sound_pattern = ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"]
-            sound_pattern = ["ftljump"]
+            sound_pattern = ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"]
+            # sound_pattern = ["ftljump"]
             play_music = threading.Thread(target=music_thread, args=(sound_pattern, music_stop))
             play_music.start()
         if ground_control.light_permission():
             light_pattern = ground_control.light_directive()
             #patternlib = os.listdir(patternlibdir)
             execfile("/home/pi/major-tom/pattern-lib/"+light_pattern+".py") # if light_pattern.py in patternlib
-            while time_elapsed < 15:
+            while time_elapsed < 10:
                 display_pattern(light_strip)
                 time_elapsed = time.time() - start_time
             turnOff(light_strip)
-        while time_elapsed < 15:
+        while time_elapsed < 10:
             time_elapsed = time.time() - start_time
         # turn off the music thread by sending the stop event
         music_stop.set()
