@@ -118,12 +118,13 @@ while True:
     print sensor.value # debugging
     if sensor.is_triggered():
         print "in triggered block" # debugging
+        music_stop= threading.Event()
         start_time = time.time()
         time_elapsed = 0
         if ground_control.sound_permission():
             # sound_pattern = ground_control.sound_directive()
-            sound_pattern = ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"]
-            music_stop= threading.Event()
+            # sound_pattern = ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"]
+            sound_pattern = ["ftljump"]
             play_music = threading.Thread(target=music_thread, args=(sound_pattern, music_stop))
             play_music.start()
         if ground_control.light_permission():
