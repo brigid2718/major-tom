@@ -71,9 +71,13 @@ def display_pattern(strip):
     timestep_ms =  60
     numsteps = 100
 
-    pattern = initpattern(strip, numsteps , Color(255,255,255))
+    pattern = initpattern(strip, numsteps , Color(10,10,10))
     #modulate_brightness(pattern)
-    [ pulsepixel(pattern, 0, i, Color(255,255,255)) for i in range(strip.numPixels()) ]
+    [ pulsepixel(pattern, 0, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
+    [ pulsepixel(pattern, 20, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
+    [ pulsepixel(pattern, 40, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
+    [ pulsepixel(pattern, 60, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
+    [ pulsepixel(pattern, 80, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
     place_droids(pattern[1], 12, strip.numPixels)
 
     for pos, step in enumerate(pattern):
