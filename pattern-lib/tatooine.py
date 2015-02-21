@@ -39,8 +39,7 @@ def modulate_brightness(pattern,  speed=3.0):
         multip = i%(speed + 1)/speed
         colorvalue = int(255 * multip)
         color = Color(colorvalue, colorvalue, colorvalue)
-        print color
-        pattern[i] = [ Pixel(color) for s in range(100) ]
+        pattern[i] = [ Pixel(color) for s in range(30) ]
 
 
 
@@ -52,7 +51,6 @@ def display_pattern(strip):
     pattern = initpattern(strip, numsteps , Color(255,255,255))
     modulate_brightness(pattern)
     place_droids(pattern[1], 12, strip.numPixels)
-    import IPython; IPython.embed(); sys.exit()
 
     for pos, step in enumerate(pattern):
         place_droids(step, pos, strip.numPixels)
