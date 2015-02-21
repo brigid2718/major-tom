@@ -6,6 +6,7 @@ class GroundControl:
         self.uid = uid
         self.state_q = "/state_settings"
         self.mission_q = "/mission_settings"
+        self.sound_q = "/sound_pattern"
 
     def light_permission(self):
         if self.query_state_settings("lights_on"):
@@ -27,11 +28,18 @@ class GroundControl:
             return directive
 
     def sound_directive(self):
-        directive = self.query_mission_settings("sound_directive")
+        directive = self.query_sound_pattern()
         if directive == False:
             return ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"] # default is greenwoodave
         else:
             return directive
+
+    def query_sound_pattern(self):
+        try:
+            r = requests.get(self.url+self.uid+self.sound_q).json()["sound_pattern"]
+            return r
+        except:
+            return False
 
     def query_state_settings(self, str):
         try:
