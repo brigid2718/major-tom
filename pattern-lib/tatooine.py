@@ -33,6 +33,15 @@ def place_droids(step, pos, numPixels):
     step[pos % numPixels()] = r2
     step[(pos + 2) % numPixels()] = tpo
 
+def modulate_brightness(pattern,  speed=3.0):
+
+    for i, step in enumerate(pattern):
+        multip = i%(speed + 1)/speed
+        colorvalue = int(255 * multip)
+        color = Color(colorvalue, colorvalue, colorvalue)
+        print color
+        pattern[i] = [ Pixel(color) for s in range(100) ]
+
 
 
 def display_pattern(strip):
@@ -41,14 +50,15 @@ def display_pattern(strip):
     numsteps = 100
 
     pattern = initpattern(strip, numsteps , Color(255,255,255))
+    modulate_brightness(pattern)
     place_droids(pattern[1], 12, strip.numPixels)
+    import IPython; IPython.embed(); sys.exit()
 
     for pos, step in enumerate(pattern):
         place_droids(step, pos, strip.numPixels)
+        modulate_brightness(pattern)
         
 
-    #import IPython; IPython.embed()
-    #sys.exit()
 
     for step in pattern:
         #print "STEP"
