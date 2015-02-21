@@ -33,7 +33,30 @@ def place_droids(step, pos, numPixels):
     step[pos % numPixels()] = r2
     step[(pos + 2) % numPixels()] = tpo
 
-def modulate_brightness(pattern,  speed=3.0):
+def pulsepixel(pattern, beginstep, position, color):
+    pulse_duration = 20
+
+    # We need to unpack the color into RGB
+    blue = color & 255
+    green = (color >> 8) & 255
+    red = (color >> 16) & 255
+
+    #TODO: Fix this gross type mess. Ew.
+    for i, step in enumerate(pattern[beginstep : beginstep+pulse_duration]):
+        newred = int(red * ((i+1)/float(pulse_duration)))
+        newgreen = int(green * ((i+1)/float(pulse_duration)))
+        newblue = int(blue * ((i+1)/float(pulse_duration)))
+
+        step[position].color = Color(newred, newgreen, newblue)
+
+    for i, step in enumerate(pattern[beginstep+pulse_duration : beginstep+2*pulse_duration]):
+        newred = int(red * ((pulse_duration-i)/float(pulse_duration)))
+        newgreen = int(green * ((pulse_duration-i)/float(pulse_duration)))
+        newblue = int(blue * ((pulse_duration-i)/float(pulse_duration)))
+
+        step[position].color = Color(newred, newgreen, newblue)
+
+def modulate_brightness(pattern,  speed=20.0):
 
     for i, step in enumerate(pattern):
         multip = i%(speed + 1)/speed
@@ -48,13 +71,17 @@ def display_pattern(strip):
     timestep_ms =  60
     numsteps = 100
 
-    pattern = initpattern(strip, numsteps , Color(255,255,255))
-    modulate_brightness(pattern)
+    pattern = initpattern(strip, numsteps , Color(10,10,10))
+    #modulate_brightness(pattern)
+    [ pulsepixel(pattern, 0, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
+    [ pulsepixel(pattern, 20, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
+    [ pulsepixel(pattern, 40, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
+    [ pulsepixel(pattern, 60, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
+    [ pulsepixel(pattern, 80, i, Color(10,10,10)) for i in range(strip.numPixels()) ]
     place_droids(pattern[1], 12, strip.numPixels)
 
     for pos, step in enumerate(pattern):
         place_droids(step, pos, strip.numPixels)
-        modulate_brightness(pattern)
         
 
 
