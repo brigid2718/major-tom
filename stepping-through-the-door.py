@@ -146,7 +146,7 @@ while True:
         if ground_control.sound_permission():
             # sound_pattern = ground_control.sound_directive()
             # sound_pattern = ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"]
-            sound_pattern = ["aliens1"]
+            sound_pattern = ["tesseract"]
             play_music = threading.Thread(target=music_thread, args=(sound_pattern, music_stop))
             play_music.start()
         if ground_control.light_permission():
