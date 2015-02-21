@@ -43,20 +43,31 @@ def pulsepixel(pattern, beginstep, position, color):
 
         step[position].color = Color(newred, newgreen, newblue)
 
+def place_droids(step, pos, numPixels):
+    """ Place R2 and 3PO on the strip at position 'pos
+
+    """
+
+    r2 = Pixel(Color(0,0,255))
+    tpo = Pixel(Color(255,215,0))
+
+    # Place r2 at the location passed to us, place 3PO two pixel ahead
+    # (In both cases wrap around if we reach the end)
+    step[pos % numPixels()] = r2
+    step[pos + 2 % numPixels()] = tpo
+
+
 
 def display_pattern(strip):
     print "STARTING PATTERN (stepping through the door loops for 20 seconds)"
     timestep_ms =  60
 
     pattern = initpattern(strip, 100, Color(255,255,255))
-                                                        
-    import IPython; IPython.embed()
-    sys.exit()
+    place_droids(pattern[1], 12, strip.numPixels)
 
-    # At timestep 2, set pixel at position 5 to white
-    # pattern[2][5].color=Color(255,255,255)
-    # pulsepixel(pattern, 1, 6, Color(0,0,255))
-    ##[ pulsepixel(pattern, 1, i, Color(0,0,255)) for i in range(strip.numPixels()) ]
+    #import IPython; IPython.embed()
+    #sys.exit()
+
     for step in pattern:
         #print "STEP"
         for position, pixel in enumerate(step):
