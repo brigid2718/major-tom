@@ -1,4 +1,4 @@
-""" Rain pattern for major-tom
+""" Tatooine pattern for major-tom
 
 """
 
@@ -19,29 +19,6 @@ def initpattern(strip, numsteps, color = Color(0,0,0)):
 
     pattern = [ [ Pixel(color) for pixel in range(strip.numPixels()) ] for step in range(numsteps) ]
     return pattern
-
-def pulsepixel(pattern, beginstep, position, color):
-    pulse_duration = 20
-
-    # We need to unpack the color into RGB
-    blue = color & 255
-    green = (color >> 8) & 255
-    red = (color >> 16) & 255
-
-    #TODO: Fix this gross type mess. Ew.
-    for i, step in enumerate(pattern[beginstep : beginstep+pulse_duration]):
-        newred = int(red * ((i+1)/float(pulse_duration)))
-        newgreen = int(green * ((i+1)/float(pulse_duration)))
-        newblue = int(blue * ((i+1)/float(pulse_duration)))
-
-        step[position].color = Color(newred, newgreen, newblue)
-
-    for i, step in enumerate(pattern[beginstep+pulse_duration : beginstep+2*pulse_duration]):
-        newred = int(red * ((pulse_duration-i)/float(pulse_duration)))
-        newgreen = int(green * ((pulse_duration-i)/float(pulse_duration)))
-        newblue = int(blue * ((pulse_duration-i)/float(pulse_duration)))
-
-        step[position].color = Color(newred, newgreen, newblue)
 
 def place_droids(step, pos, numPixels):
     """ Place R2 and 3PO on the strip at position 'pos
