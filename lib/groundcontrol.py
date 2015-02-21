@@ -26,7 +26,7 @@ class GroundControl:
         else:
             return directive
 
-    def light_directive(self):
+    def sound_directive(self):
         directive = self.query_mission_settings("sound_directive")
         if directive == False:
             return ["teleport2", "teleport1", "zap1", "zap1", "zap1", "teleport3"] # default is greenwoodave
