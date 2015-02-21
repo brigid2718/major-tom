@@ -54,16 +54,21 @@ def place_droids(step, pos, numPixels):
     # Place r2 at the location passed to us, place 3PO two pixel ahead
     # (In both cases wrap around if we reach the end)
     step[pos % numPixels()] = r2
-    step[pos + 2 % numPixels()] = tpo
+    step[(pos + 2) % numPixels()] = tpo
 
 
 
 def display_pattern(strip):
-    print "STARTING PATTERN (stepping through the door loops for 20 seconds)"
+    #print "STARTING PATTERN (stepping through the door loops for 20 seconds)"
     timestep_ms =  60
+    numsteps = 100
 
-    pattern = initpattern(strip, 100, Color(255,255,255))
+    pattern = initpattern(strip, numsteps , Color(255,255,255))
     place_droids(pattern[1], 12, strip.numPixels)
+
+    for pos, step in enumerate(pattern):
+        place_droids(step, pos, strip.numPixels)
+        
 
     #import IPython; IPython.embed()
     #sys.exit()
