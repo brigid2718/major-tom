@@ -54,7 +54,7 @@ def raindrops(pattern, strip, numdrops=80):
     while (numdrops >0):
         step = random.randrange(len(pattern))
         pos = random.randrange(strip.numPixels())
-        r,g,b = (random.randrange(20), random.randrange(50),
+        r,g,b = (random.randrange(30), random.randrange(100),
                  random.randrange(150,255))
         makeraindrop(pattern, strip, step, pos, color=Color(r,g,b))
         numdrops -= 1
