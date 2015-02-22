@@ -8,6 +8,12 @@ class GroundControl:
         self.mission_q = "/mission_settings"
         self.sound_q = "/sound_pattern"
 
+    def power_off(self):
+        if self.query_state_settings("power_off"):
+            return True
+        else:
+            return False
+
     def light_permission(self):
         if self.query_state_settings("lights_on"):
             return True

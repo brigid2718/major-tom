@@ -8,6 +8,7 @@ import pygame
 import time
 import sys
 import pygame
+import subprocess
 
 from signal import alarm, signal, SIGALRM, SIGKILL
 
@@ -143,6 +144,9 @@ while True:
         music_stop= threading.Event()
         start_time = time.time()
         time_elapsed = 0
+        if ground_control.power_off():
+            subprocess.call(["/usr/bin/sudo", "/sbin/poweroff"])
+            sys.exit()
         if ground_control.sound_permission():
             sound_pattern = ground_control.sound_directive()
             play_music = threading.Thread(target=music_thread, args=(sound_pattern, music_stop))
