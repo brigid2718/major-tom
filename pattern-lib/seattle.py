@@ -57,9 +57,12 @@ def makeraindrop(pattern, strip, step, start_pos, color=Color(0,0,255), fadetime
 
     # Iterate throug drop_pos and make drops!
     for pos in drop_pos:
-       pulsepixel(pattern, step, pos, color, fadetime)
-       # TODO: this shouldn't actually wrap around to step 0
-       step = (step + 1)  % len(pattern)
+       pulsepixel(pattern, step, pos, color)
+       #Stop if we reach the end of the pattern
+       if step == len(pattern):
+           break
+       else:
+           step += 1
 
 def raindrops(pattern, strip, numdrops=80):
     """ Create random raindrops.
