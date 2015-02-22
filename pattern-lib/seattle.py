@@ -39,19 +39,22 @@ def pulsepixel(pattern, beginstep, position, color, pulse_duration = 20):
 
         step[position].color = Color(newred, newgreen, newblue)
 
-def makeraindrop(pattern, strip, step, pos, color=Color(0,0,255), fadetime=4):
-    [ pulsepixel(pattern, step, pos, color, fadetime) for i in range(strip.numPixels()) ]
+def makeraindrop(pattern, strip, step, start_pos, color=Color(0,0,255), fadetime=4):
+    drop_pos = [ (start_pos + i) % strip.numPixels() for i in [0,1,-1,2,-2,3,-3,4,-4] ]
+    for pos in drop_pos:
+       pulsepixel(pattern, step, pos, color, fadetime)
+       # TODO: this shouldn't actually wrap around to step 0
+       step = (step + 1)  % len(pattern)
 
 def raindrops(pattern, strip, numdrops=80):
+    makeraindrop(pattern, strip, 0, strip.numPixels()/2)
+    makeraindrop(pattern, strip, 3, strip.numPixels()/4)
     while (numdrops >0):
         step = random.randrange(len(pattern))
-        start_pos = random.randrange(strip.numPixels())
-        drop_pos = [ (start_pos + i) % strip.numPixels() for i in [0,1,-1,2,-2,3,-3,4,-4] ]
-        for pos in drop_pos:
-           #[ pulsepixel(pattern, step, pos, Color(0,0,255), 4) for i in range(strip.numPixels()) ]
-           makeraindrop(pattern, strip, step, pos)
-           # TODO: this shouldn't actually wrap around to step 0
-           step = (step + 1)  % len(pattern)
+        pos = random.randrange(strip.numPixels())
+        r,g,b = (random.randrange(20), random.randrange(50),
+                 random.randrange(150,255))
+        makeraindrop(pattern, strip, step, pos, color=Color(r,g,b))
         numdrops -= 1
 
 
@@ -62,12 +65,10 @@ def display_pattern(strip):
 
     pattern = initpattern(strip, 100)
 
-    #[ pulsepixel(pattern, 1, i, Color(0,0,255)) for i in range(strip.numPixels()) ]
-    raindrops(pattern, strip, 10)
-    #import IPython; IPython.embed()
+    raindrops(pattern, strip, 30)
     for step in pattern:
         print "STEP"
-        print [ id(pixel) for pixel in step ]
+        #print [ id(pixel) for pixel in step ]
         for position, pixel in enumerate(step):
             strip.setPixelColor(position, pixel.color)
             if position == 5:
