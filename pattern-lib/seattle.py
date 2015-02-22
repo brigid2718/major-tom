@@ -40,22 +40,48 @@ def pulsepixel(pattern, beginstep, position, color, pulse_duration = 20):
         step[position].color = Color(newred, newgreen, newblue)
 
 def makeraindrop(pattern, strip, step, start_pos, color=Color(0,0,255), fadetime=4):
-    drop_pos = [ (start_pos + i) % strip.numPixels() for i in [0,1,-1,2,-2,3,-3,4,-4] ]
+    """ At the time and beginning position specified, create a rain drop which
+        spreads outwards for a few lights
+
+    """
+
+    # drop_offsets is a list of offsets from start_pos where we'll
+    # place raindrops.
+    # We begin with a drop at offset 0 (start_pos as passed to us)
+    # then move outward
+    drop_offsets = [0,1,-1,2,-2,3,-3,4,-4] 
+    
+    # drop_pos, a list a absolutely positions on the light strip
+    # where we'll place raindrops
+    drop_pos = [ (start_pos + i) % strip.numPixels() for i in drop_offsets ]
+
+    # Iterate throug drop_pos and make drops!
     for pos in drop_pos:
        pulsepixel(pattern, step, pos, color, fadetime)
        # TODO: this shouldn't actually wrap around to step 0
        step = (step + 1)  % len(pattern)
 
 def raindrops(pattern, strip, numdrops=80):
+    """ Create random raindrops.
+
+    """
+
+    # Make sure there are a couple of drop at the beginning of the pattern
     makeraindrop(pattern, strip, 0, strip.numPixels()/2)
     makeraindrop(pattern, strip, 0, 0)
     makeraindrop(pattern, strip, 0, strip.numPixels())
+    #... and one and the very end
     makeraindrop(pattern, strip, len(pattern), strip.numPixels()/2)
+
     while (numdrops >0):
+        # At a random time in the pattern...
         step = random.randrange(len(pattern))
+        #...and position on the light strip
         pos = random.randrange(strip.numPixels())
+        #...choose a random green-ish blue color
         r,g,b = (random.randrange(30), random.randrange(100),
                  random.randrange(150,255))
+        #...make a raindrop:
         makeraindrop(pattern, strip, step, pos, color=Color(r,g,b))
         numdrops -= 1
 
