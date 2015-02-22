@@ -48,7 +48,9 @@ def makeraindrop(pattern, strip, step, start_pos, color=Color(0,0,255), fadetime
 
 def raindrops(pattern, strip, numdrops=80):
     makeraindrop(pattern, strip, 0, strip.numPixels()/2)
-    makeraindrop(pattern, strip, 3, strip.numPixels()/4)
+    makeraindrop(pattern, strip, 0, 0)
+    makeraindrop(pattern, strip, 0, strip.numPixels())
+    makeraindrop(pattern, strip, len(pattern), strip.numPixels()/2)
     while (numdrops >0):
         step = random.randrange(len(pattern))
         pos = random.randrange(strip.numPixels())
@@ -65,7 +67,7 @@ def display_pattern(strip):
 
     pattern = initpattern(strip, 100)
 
-    raindrops(pattern, strip, 30)
+    raindrops(pattern, strip, 20)
     for step in pattern:
         print "STEP"
         #print [ id(pixel) for pixel in step ]
