@@ -6,11 +6,11 @@ def display_pattern(strip):
             strip.setPixelColor(pixel, color)
 
     def makepixelsbrighter(color):
-        for brightness in range(16,96,16):
+        for brightness in range(16,96,2):
             changeallthepixels(color)
             strip.setBrightness(brightness)
             strip.show()
-            time.sleep(.5)
+            time.sleep(.2)
 
     makepixelsbrighter(Color(0,0,255))
     makepixelsbrighter(Color(0,255,0))
