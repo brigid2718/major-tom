@@ -3,12 +3,15 @@
 import sys
 import time
 
-class Color():
-    def __init__(self, red, green, blue):
-      self.red, self.green, self.blue = (red, green, blue)
-       
-    def __str__(self):
-        return "[%s %s %s]" % (self.red, self.green, self.blue)
+#class Color():
+#    def __init__(self, red, green, blue):
+#      self.red, self.green, self.blue = (red, green, blue)
+#       
+#    def __str__(self):
+#        return "[%s %s %s]" % (self.red, self.green, self.blue)
+
+def Color(red, green, blue):
+  return (red << 16) | (green << 8) | blue
 
 class Strip():
     def __init__(self, numPixels=30):
